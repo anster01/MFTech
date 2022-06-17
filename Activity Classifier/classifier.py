@@ -30,6 +30,7 @@ feat_importances.nlargest(11).plot(kind='barh')
 plt.show()
 """
 
+# constructing a model and checking its accuracy
 classifier_model = DecisionTreeClassifier(criterion='entropy',max_depth=6,max_features='sqrt',max_leaf_nodes=10,min_samples_leaf=2,splitter='best')
 classifier_model.fit(X_train,y_train)
 y_predict = classifier_model.predict(X_test)
@@ -40,7 +41,6 @@ classifier_model = DecisionTreeClassifier(max_depth=20)
 classifier_model.fit(X_train,y_train)
 print(f"Score on training set: {classifier_model.score(X_train,y_train)}")
 print(f"Score on test set: {classifier_model.score(X_test,y_test)}")
-quit()
 
 # Hyperparameter tuning
 parameters={
