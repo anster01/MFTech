@@ -37,6 +37,15 @@ https://templatemo.com/tm-543-breezed
     referrerpolicy="no-referrer"
   ></script>
 
+    <!--<link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />-->
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <py-env>
+      - scikit-learn
+      - paths:
+        - ./assets/RFC_model.py
+        - ./assets/rfc_finalized_model.sav
+    </py-env>
+
     </head>
 
     <body>
@@ -182,7 +191,7 @@ https://templatemo.com/tm-543-breezed
                           'rgb(231,180,22)',
                           'rgb(204,50,50)',
                         ],
-                        needleValue: 69,
+                        needleValue: 33,
                         borderColor: 'rgb(200, 247, 240)',
                         borderWidth: 1,
                         cutout: '95%',
@@ -200,7 +209,7 @@ https://templatemo.com/tm-543-breezed
                         ctx.save();
                         //const needleValue = data.datasets[0].needleValue;
                         const needleValue = data.datasets[0].needleValue;
-                        const dataTotal = 174;
+                        const dataTotal = 80;
                         const angle = Math.PI + (1 / dataTotal * needleValue * Math.PI);
                         const cx = width/2;
                         const cy = chart._metasets[0].data[0].y;
@@ -222,12 +231,12 @@ https://templatemo.com/tm-543-breezed
 
                         ctx.font = '30px Helvetica';
                         ctx.fillStyle = '#444';
-                        if (needleValue < 59) {
+                        if (needleValue < 31) {
                           ctx.fillText(Math.round((needleValue/dataTotal)*100)+'%: Stress Levels are Low',cx,cy+30);
-                        } else if (needleValue > 58 && needleValue < 117) {
-                          ctx.fillText(Math.round((needleValue/dataTotal)*100)+'%: Stress Levels are High',cx,cy+30);
+                        } else if (needleValue > 30 && needleValue < 50) {
+                          ctx.fillText(Math.round((needleValue/dataTotal)*100)+'%: Stress Levels are Average',cx,cy+30);
                         } else {
-                          ctx.fillText(Math.round((needleValue/dataTotal)*100)+'%: Stress Levels are Severe',cx,cy+30);
+                          ctx.fillText(Math.round((needleValue/dataTotal)*100)+'%: Stress Levels are High',cx,cy+30);
                         }
 
                         ctx.textAlign = 'center';
@@ -308,7 +317,15 @@ https://templatemo.com/tm-543-breezed
             </div>
           </div>
           <div class="col-lg-9">
-            <h4 align='center'>Predicted Activity: Heavy Movement e.g. gym, running</h4>
+            <table align='center'>
+                  <tr>
+                      <td style='border:none;'><h4 align='center'>Predicted Activity: </h4></td>
+                      <td style='border:none;'><h4 align='center' id="mytext">Loading...</h4></td>
+                  </tr>
+            </table>
+            <py-script src="./assets/RFC_model.py">
+
+            </py-script>
             <br>
             <br>
             <table align='center'>
@@ -323,11 +340,11 @@ https://templatemo.com/tm-543-breezed
               </thead>
               <tbody>
                 <tr>
-                  <td>12</td>
-                  <td>2</td>
-                  <td>83</td>
-                  <td>83.89</td>
-                  <td>10</td>
+                  <td id="axis-1"></td>
+                  <td id="axis-2"></td>
+                  <td id="axis-3"></td>
+                  <td id="vec-mg"></td>
+                  <td id="heart-rate"></td>
                 </tr>
               </tbody>
             </table>
