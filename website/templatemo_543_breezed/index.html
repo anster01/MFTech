@@ -41,9 +41,15 @@ https://templatemo.com/tm-543-breezed
     <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
     <py-env>
       - scikit-learn
+      - pandas
+      - hrv-analysis
       - paths:
         - ./assets/RFC_model.py
         - ./assets/rfc_finalized_model.sav
+        - ./assets/svm_finalized_model.sav
+        - ./assets/SVM_model.py
+        - ./assets/final_HRV_stai.csv
+        - ./assets/testSubject.csv
     </py-env>
 
     </head>
@@ -178,17 +184,25 @@ https://templatemo.com/tm-543-breezed
               <div class="filters-content">
                 <div id="graphs" class="py-2">
                   <h4>Stress Reading</h4>
+                  <table align='center'>
+                        <tr>
+                            <td style='border:none;'><h4 align='center'>Stress Level: </h4></td>
+                            <td style='border:none;'><h4 align='center' id="mytext2">Loading...</h4></td>
+                        </tr>
+                  </table>
                   <canvas id="myChart2"></canvas>
+                  <py-script src="./assets/SVM_model.py">
+
+                  </py-script>
                   <script>
                     // setup
                     const data = {
                       labels: ['Mon', 'Tue', 'Wed'],
                       datasets: [{
                         label: 'Weekly Sales',
-                        data: [58, 58, 58],
+                        data: [58, 58],
                         backgroundColor: [
                           'rgb(45,201,55)',
-                          'rgb(231,180,22)',
                           'rgb(204,50,50)',
                         ],
                         needleValue: 33,
@@ -231,10 +245,8 @@ https://templatemo.com/tm-543-breezed
 
                         ctx.font = '30px Helvetica';
                         ctx.fillStyle = '#444';
-                        if (needleValue < 31) {
+                        if (needleValue < 59) {
                           ctx.fillText(Math.round((needleValue/dataTotal)*100)+'%: Stress Levels are Low',cx,cy+30);
-                        } else if (needleValue > 30 && needleValue < 50) {
-                          ctx.fillText(Math.round((needleValue/dataTotal)*100)+'%: Stress Levels are Average',cx,cy+30);
                         } else {
                           ctx.fillText(Math.round((needleValue/dataTotal)*100)+'%: Stress Levels are High',cx,cy+30);
                         }
@@ -295,10 +307,6 @@ https://templatemo.com/tm-543-breezed
                       </tr>
                     </tbody>
                   </table>
-                  <p align='center'><br><br>Your HRV is very low which contributes to your stress.</p>
-                  <p align='center'>You should cut down on your unhealthy habits such as by smoking less and drinking less alcohol and caffiene.</p>
-                  <p align='center'>You should create a regular sleep pattern to inprove sleep quality and so reduce stress levels.</p>
-                  <p align='center'>You should excercise appropriately, increasing light and medium excercise by walking or cycling more.</p>
                 </div>
               </div>
           </div>
