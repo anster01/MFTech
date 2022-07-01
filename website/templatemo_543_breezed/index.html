@@ -689,7 +689,7 @@ https://templatemo.com/tm-543-breezed
       const headers = ["BMI","Anxiety","Sleep Quality","Stress","Activity Time (mins)","Unhealthy Habits (mins)", "HRV (ms)"];
 
 
-      function createGraph(tableData,subject) {
+      function createGraph(tableData,subject) { //generates the chart for the Dashboard
         if (subject == 22) {
           const labels = [
             'Anxiety',
@@ -859,7 +859,7 @@ https://templatemo.com/tm-543-breezed
 
 
 
-      function createTable(tableData,subject) {
+      function createTable(tableData,subject) { //generates the table for the Dashboard
         const title = document.getElementById('subject-title');
         if (subject == 22) {
           title.innerHTML = "Overview";
@@ -919,7 +919,7 @@ https://templatemo.com/tm-543-breezed
         }
       }
 
-      function createAnalysis(tableData,subject){
+      function createAnalysis(tableData,subject){ //generate the analyses of the Dashboard which gives possible interventions for bad mental health markers
         const analysis = document.getElementById('analysis-p');
         const factors_to_consider = [];
         analysis.innerHTML = "";
