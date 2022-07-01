@@ -8,8 +8,9 @@ loaded_model = pickle.load(open(filename, 'rb'))
 
 test_input = pd.read_csv('testSubject.csv')
 
-predicted_output = loaded_model.predict(test_input)
+predicted_output = loaded_model.predict(test_input) #run model
 
-if predicted_output[0] == -1:
+if predicted_output[0] == -1: #output to website using pyscript
     pyscript.write("mytext2","Low")
-
+else:
+    pyscript.write("mytext2","High")

@@ -31,8 +31,8 @@ for i in range(len(test_input_normalised)):
 
 predicted_output = loaded_model.predict(test_input_normalised)
 
-predicted_output = loaded_model.predict(test_input)
+predicted_output = loaded_model.predict(test_input) #run model
 
-pyscript.write("mytext",predicted_output[0])
+pyscript.write("mytext",predicted_output[0]) #output to website
 
 #print(predicted_output)
