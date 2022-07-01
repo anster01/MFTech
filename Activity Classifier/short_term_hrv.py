@@ -6,6 +6,7 @@ from statistics import mode
 
 DURATION = 5 # in minutes
 
+# calculate 5 minutes after start time
 def calculateEndTime(startTime):
 	startTime = startTime.split(":")
 	minute = int(startTime[1]) + DURATION
@@ -15,6 +16,7 @@ def calculateEndTime(startTime):
 		hour += 1
 	return f"{hour if hour >= 10 else str(0)+str(hour)}:{minute if minute >= 10 else str(0)+str(minute)}:{startTime[2]}"
 
+# return true if time1 is before time2
 def before(time1, time2):
 	time1 = time1.split(":")
 	if time2 == "24:00:00" and int(time1[0]) == 0:
@@ -24,6 +26,9 @@ def before(time1, time2):
 		return True
 	return False
 
+# compare the start time of RR and Actigraph and choose the later one as start time
+# return the first time after the start time where the minutes are a multiple of 5
+# to conveniently divide the dataset into 5-minute time frame
 def findStartTime(rrStart, actigraphStart):
 	rrStart = rrStart.split(':')
 	actigraphStart = actigraphStart.split(':')
@@ -53,6 +58,9 @@ def findStartTime(rrStart, actigraphStart):
 	minute = minute + 5 - (minute % 5) if minute % 5 != 0 or second != 0 else minute
 	return f"{hour if hour >= 10 else str(0)+str(hour)}:{minute if minute >= 10 else str(0)+str(minute)}:00"
 
+# compare the end time of RR and Actigraph and choose the earlier one as end time
+# return the last time before the end time where the minutes are a multiple of 5
+# to conveniently divide the dataset into 5-minute time frame
 def findEndTime(rrEnd, actigraphEnd):
 	rrEnd = rrEnd.split(':')
 	actigraphEnd = actigraphEnd.split(':')
@@ -77,6 +85,7 @@ def findEndTime(rrEnd, actigraphEnd):
 	minute = minute - (minute % 5) if minute % 5 != 0 else minute
 	return f"{hour if hour >= 10 else str(0)+str(hour)}:{minute if minute >= 10 else str(0)+str(minute)}:00"
 
+# loop for every user
 for i in range(1,23):
 
 	# clean RR data
@@ -102,8 +111,6 @@ for i in range(1,23):
 
 	# variables for rr
 	rr_row = 0
-	#rr_total_entire = 0
-	#rr_count_entire = 0
 
 	# variables for actigraph
 	actigraph_row = 0
@@ -145,6 +152,7 @@ for i in range(1,23):
 		actigraph_count = 0
 		activityLabels = []
 
+		# calculate hrv (rmssd)
 		while before(rrData.iloc[rr_row][3], after_duration):
 			rr_total += (rrData.iloc[rr_row][1]*1000 - rrData.iloc[rr_row+1][1]*1000) ** 2
 			if math.isnan(rr_total):
@@ -171,8 +179,6 @@ for i in range(1,23):
 		# store short term HRV result
 		rr_result = "missing" if rr_count == 0 else math.sqrt(rr_total / rr_count)
 		print(f"{start_time}-{after_duration} short term HRV: {rr_result} from {rr_count} number of data")
-		#rr_total_entire += rr_total
-		#rr_count_entire += rr_count
 
 		# store actigraph result
 		actigraph_axis1_result = "missing" if actigraph_count == 0 else actigraph_axis1_total / actigraph_count
@@ -223,7 +229,6 @@ for i in range(1,23):
 	actigraph_axis3_result_entire = actigraph_axis3_total_entire / actigraph_count_entire
 	actigraph_vector_magnitude_result_entire = actigraph_vector_magnitude_total_entire / actigraph_count_entire
 	actigraph_hr_result_entire = actigraph_hr_total_entire / actigraph_count_entire
-	#rr_result_entire = math.sqrt(rr_total_entire / rr_count_entire)
 
 	for row in range(new_dataframe.shape[0]):
 		new_dataframe.iloc[row][0] = float(new_dataframe.iloc[row][0]) / actigraph_axis1_result_entire if new_dataframe.iloc[row][0] != "missing" else "missing"
@@ -232,7 +237,10 @@ for i in range(1,23):
 		new_dataframe.iloc[row][9] = float(new_dataframe.iloc[row][9]) / actigraph_vector_magnitude_result_entire if new_dataframe.iloc[row][9] != "missing" else "missing"
 		new_dataframe.iloc[row][10] = float(new_dataframe.iloc[row][10]) / actigraph_hr_result_entire if new_dataframe.iloc[row][10] != "missing" else "missing"
 	
+	# dataset with missing activity label
 	new_dataframe.to_csv('data.0/DataPaper/user_' + str(i) + '/Activity_Classifier_data_with_missing.csv')
+	
+	# remove samples with missing activity label
 	missing_rows = []
 	for row in range(new_dataframe.shape[0]):
 		if new_dataframe.iloc[row][11] == -1 or new_dataframe.iloc[row][11] == "missing":

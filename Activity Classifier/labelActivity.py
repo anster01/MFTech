@@ -1,6 +1,7 @@
 import pandas as pd
 import math
 
+# return true if time is within start and end
 def within_period(time, start, end):
 	# time given in hh:mm:ss
 	# start, end given in hh:mm
